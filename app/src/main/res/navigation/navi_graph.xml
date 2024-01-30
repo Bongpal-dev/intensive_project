@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navi_graph"
+    app:startDestination="@id/main">
+
+    <fragment
+        android:id="@+id/main"
+        android:name="com.android.intensiveproject.fragment.MainFragment"
+        android:label="main_fragment"
+        tools:layout="@layout/fragment_main">
+
+        <action
+            android:id="@+id/action_main_to_search"
+            app:destination="@id/search" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/my_storage"
+        android:name="com.android.intensiveproject.fragment.MyStorageFragment"
+        android:label="my_storage_fragment"
+        tools:layout="@layout/fragment_my_storagy" />
+
+    <fragment
+        android:id="@+id/search"
+        android:name="com.android.intensiveproject.searchfragment.SearchFragment"
+        android:label="search_fragment"
+        tools:layout="@layout/fragment_search" />
+
+</navigation>
