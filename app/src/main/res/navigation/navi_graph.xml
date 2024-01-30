@@ -27,6 +27,11 @@
         android:id="@+id/search"
         android:name="com.android.intensiveproject.searchfragment.SearchFragment"
         android:label="search_fragment"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_search_to_my_storage"
+            app:destination="@id/my_storage"
+            app:popUpTo="@id/navi_graph" />
+    </fragment>
 
 </navigation>

@@ -9,26 +9,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.intensiveproject.MainActivityViewModel
 import com.android.intensiveproject.R
 import com.android.intensiveproject.TAG
 import com.android.intensiveproject.adapter.ImageSearchAdapter
 import com.android.intensiveproject.databinding.FragmentMyStoragyBinding
-import com.android.intensiveproject.retrofit.ImageItemDetail
-import com.android.intensiveproject.searchfragment.MY_FAVORITE
-import com.android.intensiveproject.util.PrefUtil
-import com.google.gson.Gson
+import com.android.intensiveproject.model.retrofit.ImageItemDetail
+import com.android.intensiveproject.model.PreferenceRepository
 
 class MyStorageFragment : Fragment() {
     private val binding by lazy { FragmentMyStoragyBinding.inflate(layoutInflater) }
-    private val listAdapter by lazy { ImageSearchAdapter(requireContext()) }
-    private val preferenceUtil by lazy { PrefUtil(requireContext()) }
+    private val imageSearchAdapter by lazy { ImageSearchAdapter(requireContext()) }
+    private val preferenceRepository by lazy { PreferenceRepository(requireContext()) }
     lateinit var backPressedCallback: OnBackPressedCallback
+    private val mainActivityViewModel by lazy { ViewModelProvider(this).get(MainActivityViewModel::class.java) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        onBackPressed()
+//        onBackPressed()
     }
 
     private fun onBackPressed() {
@@ -49,32 +50,43 @@ class MyStorageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initObserver()
+        initView()
     }
 
+    private fun initView() {
+        initRecyclerView()
+        initClickFavorite()
+    }
+
+    private fun initObserver() {
+        with(mainActivityViewModel) {
+            MyStorages.observe(viewLifecycleOwner) {
+                imageSearchAdapter.submitList(it.toList())
+            }
+        }
+    }
 
     private fun initRecyclerView() {
-        val pref = requireActivity().getSharedPreferences(MY_FAVORITE, Context.MODE_PRIVATE)
-        val gson = Gson()
-
         with(binding.rvMyFavorite) {
-            adapter = listAdapter
+            adapter = imageSearchAdapter
             layoutManager = LinearLayoutManager(context)
+            itemAnimator = null
         }
-        listAdapter.submitList(preferenceUtil.getAll())
+    }
 
-
+    private fun initClickFavorite() {
         object : ImageSearchAdapter.ClickFavoriteListener {
             override fun onClick(item: ImageItemDetail) {
-                preferenceUtil.togglePref(item)
-                listAdapter.submitList(preferenceUtil.getAll())
+                mainActivityViewModel.togglePreferenceItem(preferenceRepository, item)
             }
-        }.also { listAdapter.onClick = it }
+        }.also { imageSearchAdapter.onClick = it }
     }
 
     override fun onResume() {
         super.onResume()
-        initRecyclerView()
         checkBackStack(parentFragmentManager)
+        imageSearchAdapter.notifyDataSetChanged()
     }
 }
 

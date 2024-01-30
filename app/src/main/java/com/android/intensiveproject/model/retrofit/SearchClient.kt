@@ -1,10 +1,9 @@
-package com.android.intensiveproject.retrofit
+package com.android.intensiveproject.model.retrofit
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import java.util.concurrent.TimeUnit
 
 object SearchClient {
@@ -14,7 +13,7 @@ object SearchClient {
         .addConverterFactory(GsonConverterFactory.create())
         .client(createOKHttpClient())
         .build()
-    val retrofitClient: SearchInterface = retrofit.create(SearchInterface::class.java)
+    val retrofitClient: SearchModel = retrofit.create(SearchModel::class.java)
 
     private fun createOKHttpClient(): OkHttpClient {
         val interceptor = HttpLoggingInterceptor().apply {

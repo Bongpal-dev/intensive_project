@@ -7,7 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.android.intensiveproject.adapter.ImageSearchAdapter
 import com.android.intensiveproject.databinding.ActivityMainBinding
-import com.android.intensiveproject.retrofit.ImageItemDetail
+import com.android.intensiveproject.model.retrofit.ImageItemDetail
 
 const val TAG = "project_test_log"
 

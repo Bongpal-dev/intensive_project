@@ -2,7 +2,6 @@ package com.android.intensiveproject.adapter
 
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
@@ -11,10 +10,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import coil.load
 import com.android.intensiveproject.R
-import com.android.intensiveproject.TAG
 import com.android.intensiveproject.databinding.ItemSerchRecyclerBinding
-import com.android.intensiveproject.retrofit.ImageItemDetail
-import com.android.intensiveproject.util.PrefUtil
+import com.android.intensiveproject.model.retrofit.ImageItemDetail
+import com.android.intensiveproject.model.PreferenceRepository
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -44,7 +42,7 @@ class ImageSearchAdapter(val context: Context) :
         val item = getItem(position)
         val postTime = LocalDateTime.parse(item.datetime, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")
-        val favoriteList = PrefUtil(context).getAll()
+        val favoriteList = PreferenceRepository(context).getAll()
 
         with(holder as SearchItemViewHolder) {
             image.load(item.imageUrl)
