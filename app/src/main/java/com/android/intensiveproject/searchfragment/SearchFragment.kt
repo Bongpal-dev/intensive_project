@@ -3,7 +3,7 @@ package com.android.intensiveproject.searchfragment
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
+import android.view.KeyEvent.*
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,33 +13,39 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.intensiveproject.MainActivityViewModel
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
+import com.android.intensiveproject.MainViewModel
 import com.android.intensiveproject.TAG
 import com.android.intensiveproject.adapter.ImageSearchAdapter
+import com.android.intensiveproject.data.Contents
 import com.android.intensiveproject.databinding.FragmentSearchBinding
 import com.android.intensiveproject.extention.gone
+import com.android.intensiveproject.extention.moveWithAnimation
 import com.android.intensiveproject.extention.visible
 import com.android.intensiveproject.fragment.checkBackStack
-import com.android.intensiveproject.model.retrofit.ImageItemDetail
 import com.android.intensiveproject.util.ItemDeco
-import com.android.intensiveproject.model.PreferenceRepository
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-const val MY_FAVORITE = "MyFavorite"
-const val SEARCH_KEYWORD = "SearchKeyword"
 
 class SearchFragment : Fragment() {
     private val binding by lazy { FragmentSearchBinding.inflate(layoutInflater) }
-    private val imageSearchAdapter by lazy { ImageSearchAdapter(requireContext()) }
-    private val preferenceRepository by lazy { PreferenceRepository(requireContext()) }
-    private val viewModel by lazy { ViewModelProvider(this).get(SearchFragmentViewModel::class.java) }
-    private val mainActivityViewModel by lazy { ViewModelProvider(this).get(MainActivityViewModel::class.java) }
+    private val imageSearchAdapter by lazy { ImageSearchAdapter(mainViewModel.getAllPrefItems()) }
+    private val viewModel by lazy { ViewModelProvider(this).get(SearchViewModel::class.java) }
+    private val mainViewModel by lazy {
+        ViewModelProvider(requireActivity()).get(
+            MainViewModel::class.java
+        )
+    }
     private val imm by lazy { requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return binding.root
     }
 
@@ -62,30 +68,47 @@ class SearchFragment : Fragment() {
                 imageSearchAdapter.submitList(it.toList())
             }
         }
+
+        with(mainViewModel) {
+            myStorages.observe(requireActivity()) {
+                Log.i(TAG, "서치에서 받음: ${it.size}")
+                imageSearchAdapter.storageItem = it
+                imageSearchAdapter.notifyDataSetChanged()
+            }
+            toolBarState.observe(viewLifecycleOwner) { visible ->
+                if (visible) {
+                    binding.layoutSearchBar.moveWithAnimation(0f)
+                } else {
+                    binding.layoutSearchBar.moveWithAnimation(-60f)
+                }
+            }
+        }
     }
+
 
     private fun initViews() {
         initSearchBar()
         initRecyclerView()
         initFavoriteButton()
     }
+
     private fun initSearchBar() {
         pressedEnterKey()
         clickSearchButton()
         clickTextClearButton()
-        hideSearchBarWithScorll()
     }
 
     private fun pressedEnterKey() {
         with(binding) {
             etSearchBar.setOnKeyListener { _, keyCode, event ->
-                if (keyCode == KeyEvent.KEYCODE_ENTER && etSearchBar.text.isEmpty()) {
+                if (keyCode == KEYCODE_ENTER && etSearchBar.text.isEmpty()) {
                     viewModel.textIsEmpty("검색어를 입력해 주세요")
-                    return@setOnKeyListener false
+                    return@setOnKeyListener true
                 }
 
-                if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
-                    viewModel.getDataFromAPI(etSearchBar.text.toString())
+                if (keyCode == KEYCODE_ENTER && event.action == ACTION_UP) {
+                    viewModel.getSearchResults(etSearchBar.text.toString())
+                    mainViewModel.setSearchKeyword(etSearchBar.text.toString())
                     hideKeyboard()
                     rvSearchResult.requestFocus()
                     return@setOnKeyListener false
@@ -102,7 +125,8 @@ class SearchFragment : Fragment() {
                     viewModel.textIsEmpty("검색어를 입력해 주세요")
                     return@setOnClickListener
                 }
-                viewModel.getDataFromAPI(etSearchBar.text.toString())
+                viewModel.getSearchResults(etSearchBar.text.toString())
+                mainViewModel.setSearchKeyword(etSearchBar.text.toString())
                 hideKeyboard()
                 rvSearchResult.requestFocus()
             }
@@ -119,33 +143,48 @@ class SearchFragment : Fragment() {
                 ivTextClear.visible()
                 btnTextClear.setOnClickListener {
                     etSearchBar.text.clear()
+                    etSearchBar.requestFocus()
+                    showKeyboard(etSearchBar)
                 }
             }
         }
     }
 
-    private fun hideSearchBarWithScorll() {
-        with(binding.rvSearchResult) {
-            setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+    private fun getScrollListener(): OnScrollListener {
 
+        return object : OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    changeToolbarVisibleWithState(newState)
             }
         }
+    }
+
+    private fun changeToolbarVisibleWithState(state: Int) {
+        lifecycleScope.launch {
+            if (state == RecyclerView.SCROLL_STATE_IDLE) {
+                delay(3000)
+                mainViewModel.showToolBar(true)
+                return@launch
+            }
+            mainViewModel.showToolBar(false)
+        }
+        return
     }
 
     private fun initRecyclerView() {
         with(binding.rvSearchResult) {
             adapter = imageSearchAdapter
             layoutManager = LinearLayoutManager(requireContext())
-            addItemDecoration(ItemDeco(requireContext()))
             itemAnimator = null
+            addItemDecoration(ItemDeco(requireContext()))
+            addOnScrollListener(getScrollListener())
         }
     }
 
     private fun initFavoriteButton() {
         object : ImageSearchAdapter.ClickFavoriteListener {
-            override fun onClick(item: ImageItemDetail) {
-                mainActivityViewModel.togglePreferenceItem(preferenceRepository, item)
-                imageSearchAdapter.notifyDataSetChanged()
+            override fun onClick(item: Contents) {
+                mainViewModel.togglePreferenceItem(item)
             }
         }.also { imageSearchAdapter.onClick = it }
     }
@@ -165,19 +204,16 @@ class SearchFragment : Fragment() {
     }
 
     private fun EditText.requestFocusIsEmpty() {
-        with(binding) {
-            if (text.isEmpty()) {
-                requestFocus()
-                showKeyboard(this@requestFocusIsEmpty)
-                return
-            }
-            rvSearchResult.requestFocus()
-        }
-    }
+        val keyword = mainViewModel.getSearchKeyword().trim()
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.i(TAG, "destroy")
+        if (keyword.isNotEmpty()) {
+            setText(keyword)
+        }
+
+        if (text.isEmpty()) {
+            requestFocus()
+            showKeyboard(this@requestFocusIsEmpty)
+        }
     }
 }
 

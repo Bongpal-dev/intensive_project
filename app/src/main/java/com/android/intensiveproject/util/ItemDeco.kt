@@ -2,10 +2,10 @@ package com.android.intensiveproject.util
 
 import android.content.Context
 import android.graphics.Rect
-import android.util.TypedValue
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import com.android.intensiveproject.extention.dpToPx
 
 class ItemDeco(val context: Context) : ItemDecoration() {
     override fun getItemOffsets(
@@ -18,15 +18,9 @@ class ItemDeco(val context: Context) : ItemDecoration() {
         val position = parent.getChildAdapterPosition(view)
 
         if (position == 0) {
-            outRect.top = 60.dpToPx(context)
+            outRect.top = 60.dpToPx()
         }
     }
 
-    fun Int.dpToPx(context: Context): Int {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            this.toFloat(),
-            context.resources.displayMetrics
-        ).toInt()
-    }
+
 }

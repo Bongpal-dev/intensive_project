@@ -5,15 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
-import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import coil.load
+import com.android.intensiveproject.MainViewModel
 import com.android.intensiveproject.R
 import com.android.intensiveproject.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
     private val binding by lazy { FragmentMainBinding.inflate(layoutInflater) }
+    private val mainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

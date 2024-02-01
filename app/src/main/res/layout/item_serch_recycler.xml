@@ -6,6 +6,18 @@
     android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/iv_type_tag"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="16dp"
+        android:elevation="20dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/tag_video"
+        app:layout_constraintBottom_toBottomOf="@id/tv_posting_site"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_posting_site" />
+
+    <ImageView
         android:id="@+id/iv_search_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,13 +70,18 @@
 
     <TextView
         android:id="@+id/tv_posting_site"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="40dp"
         android:layout_marginBottom="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@id/tv_posting_time"
-        app:layout_constraintStart_toStartOf="@id/tv_posting_time"
+        app:layout_constraintEnd_toStartOf="@id/tv_image_size"
+        app:layout_constraintStart_toEndOf="@id/iv_type_tag"
         tools:text="[네이버 블로그]" />
 
 

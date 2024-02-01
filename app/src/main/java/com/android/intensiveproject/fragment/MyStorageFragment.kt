@@ -12,20 +12,18 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.intensiveproject.MainActivityViewModel
+import com.android.intensiveproject.MainViewModel
 import com.android.intensiveproject.R
 import com.android.intensiveproject.TAG
 import com.android.intensiveproject.adapter.ImageSearchAdapter
+import com.android.intensiveproject.data.Contents
 import com.android.intensiveproject.databinding.FragmentMyStoragyBinding
-import com.android.intensiveproject.model.retrofit.ImageItemDetail
-import com.android.intensiveproject.model.PreferenceRepository
 
 class MyStorageFragment : Fragment() {
     private val binding by lazy { FragmentMyStoragyBinding.inflate(layoutInflater) }
-    private val imageSearchAdapter by lazy { ImageSearchAdapter(requireContext()) }
-    private val preferenceRepository by lazy { PreferenceRepository(requireContext()) }
+    private val imageSearchAdapter by lazy { ImageSearchAdapter(mainViewModel.getAllPrefItems()) }
     lateinit var backPressedCallback: OnBackPressedCallback
-    private val mainActivityViewModel by lazy { ViewModelProvider(this).get(MainActivityViewModel::class.java) }
+    private val mainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -60,8 +58,8 @@ class MyStorageFragment : Fragment() {
     }
 
     private fun initObserver() {
-        with(mainActivityViewModel) {
-            MyStorages.observe(viewLifecycleOwner) {
+        with(mainViewModel) {
+            myStorages.observe(viewLifecycleOwner) {
                 imageSearchAdapter.submitList(it.toList())
             }
         }
@@ -71,14 +69,13 @@ class MyStorageFragment : Fragment() {
         with(binding.rvMyFavorite) {
             adapter = imageSearchAdapter
             layoutManager = LinearLayoutManager(context)
-            itemAnimator = null
         }
     }
 
     private fun initClickFavorite() {
         object : ImageSearchAdapter.ClickFavoriteListener {
-            override fun onClick(item: ImageItemDetail) {
-                mainActivityViewModel.togglePreferenceItem(preferenceRepository, item)
+            override fun onClick(item: Contents) {
+                mainViewModel.togglePreferenceItem(item)
             }
         }.also { imageSearchAdapter.onClick = it }
     }
@@ -86,7 +83,7 @@ class MyStorageFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         checkBackStack(parentFragmentManager)
-        imageSearchAdapter.notifyDataSetChanged()
+        imageSearchAdapter.submitList(mainViewModel.getAllPrefItems().toList())
     }
 }
 
