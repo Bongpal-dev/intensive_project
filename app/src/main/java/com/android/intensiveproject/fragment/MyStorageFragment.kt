@@ -23,7 +23,7 @@ class MyStorageFragment : Fragment() {
     private val binding by lazy { FragmentMyStoragyBinding.inflate(layoutInflater) }
     private val imageSearchAdapter by lazy { ImageSearchAdapter(mainViewModel.getAllPrefItems()) }
     lateinit var backPressedCallback: OnBackPressedCallback
-    private val mainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
+    private val mainViewModel by lazy { ViewModelProvider(requireActivity()).get(MainViewModel::class.java) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

@@ -26,17 +26,18 @@
         android:id="@+id/bottom_navi"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        app:labelVisibilityMode="unlabeled"
+        android:layout_marginBottom="-2dp"
         android:background="@drawable/bg_bottom_navi"
+        android:elevation="10dp"
         app:itemActiveIndicatorStyle="@null"
         app:itemIconSize="28dp"
         app:itemIconTint="@drawable/selector_bottom_navi_color"
         app:itemRippleColor="@null"
         app:itemTextColor="@drawable/selector_bottom_navi_color"
+        app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.96"
         app:menu="@menu/bottom_navi_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

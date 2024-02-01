@@ -70,8 +70,7 @@ class SearchFragment : Fragment() {
         }
 
         with(mainViewModel) {
-            myStorages.observe(requireActivity()) {
-                Log.i(TAG, "서치에서 받음: ${it.size}")
+            myStorages.observe(viewLifecycleOwner) {
                 imageSearchAdapter.storageItem = it
                 imageSearchAdapter.notifyDataSetChanged()
             }

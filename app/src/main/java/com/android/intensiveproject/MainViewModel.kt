@@ -17,9 +17,6 @@ class MainViewModel : ViewModel() {
     fun togglePreferenceItem(item: Contents) {
         pref.toggleItemInPref(item)
         _myStorages.value = pref.getAll()
-        Log.i(TAG, "getAllsize: ${pref.getAll().size}")
-        myStorages.value?.forEach { Log.i(TAG, "myStorage: ${it}") }
-
     }
 
     fun getAllPrefItems(): MutableList<Contents> {
@@ -37,5 +34,9 @@ class MainViewModel : ViewModel() {
 
     fun showToolBar(show: Boolean) {
         _toolBarState.value = show
+    }
+
+    fun refreshMyStorage() {
+        _myStorages.value = pref.getAll()
     }
 }
