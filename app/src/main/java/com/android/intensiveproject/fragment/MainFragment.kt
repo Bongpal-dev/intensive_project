@@ -26,6 +26,7 @@ class MainFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding.bgMain.load(R.drawable.bg_main)
+        checkBackStack(parentFragmentManager)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

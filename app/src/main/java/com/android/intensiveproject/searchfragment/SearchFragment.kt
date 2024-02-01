@@ -2,7 +2,6 @@ package com.android.intensiveproject.searchfragment
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent.*
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.android.intensiveproject.MainViewModel
-import com.android.intensiveproject.TAG
 import com.android.intensiveproject.adapter.ImageSearchAdapter
 import com.android.intensiveproject.data.Contents
 import com.android.intensiveproject.databinding.FragmentSearchBinding
@@ -29,7 +27,6 @@ import com.android.intensiveproject.fragment.checkBackStack
 import com.android.intensiveproject.util.ItemDeco
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
 
 class SearchFragment : Fragment() {
     private val binding by lazy { FragmentSearchBinding.inflate(layoutInflater) }
@@ -55,8 +52,47 @@ class SearchFragment : Fragment() {
     }
 
     private fun setup() {
-        setupObserver()
         initViews()
+        setupObserver()
+    }
+
+    private fun initViews() {
+        initSearchBar()
+        initRecyclerView()
+        initFavoriteButton()
+        initScrollUpButton()
+    }
+
+    private fun initScrollUpButton() {
+        with(binding) {
+            btnScrollUp.setOnClickListener {
+                val nowPosition = (rvSearchResult.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+
+                lifecycleScope.launch {
+
+                    rvSearchResult.smoothScrollBy(0,-binding.rvSearchResult.computeVerticalScrollOffset()/4, null, 2000)
+
+                    delay(1000L)
+                    rvSearchResult.scrollToPosition(0)
+                }
+            }
+            viewModel.scrollBtnState.observe(viewLifecycleOwner) { visible ->
+                if (visible) {
+                    btnScrollUp.visible()
+                    scrollBtnGradient.visible()
+                } else {
+                    btnScrollUp.gone()
+                    scrollBtnGradient.gone()
+                }
+            }
+        }
+    }
+
+
+    private fun initSearchBar() {
+        pressedEnterKey()
+        clickSearchButton()
+        clickTextClearButton()
     }
 
     private fun setupObserver() {
@@ -75,26 +111,9 @@ class SearchFragment : Fragment() {
                 imageSearchAdapter.notifyDataSetChanged()
             }
             toolBarState.observe(viewLifecycleOwner) { visible ->
-                if (visible) {
-                    binding.layoutSearchBar.moveWithAnimation(0f)
-                } else {
-                    binding.layoutSearchBar.moveWithAnimation(-60f)
-                }
+                binding.layoutSearchBar.moveWithAnimation(if (visible) 0f else -60f)
             }
         }
-    }
-
-
-    private fun initViews() {
-        initSearchBar()
-        initRecyclerView()
-        initFavoriteButton()
-    }
-
-    private fun initSearchBar() {
-        pressedEnterKey()
-        clickSearchButton()
-        clickTextClearButton()
     }
 
     private fun pressedEnterKey() {
@@ -150,10 +169,31 @@ class SearchFragment : Fragment() {
     }
 
     private fun getScrollListener(): OnScrollListener {
-
         return object : OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    changeToolbarVisibleWithState(newState)
+                if (!recyclerView.canScrollVertically(-1) && imageSearchAdapter.currentList.size == viewModel.searchResult.value?.size) {
+                    mainViewModel.showToolBar(true)
+                    return
+                }
+                changeToolbarVisibleWithState(newState)
+
+                if (!recyclerView.canScrollVertically(1)) {
+                    viewModel.getMoreResult(binding.etSearchBar.text.toString())
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (!recyclerView.canScrollVertically(-1)) {
+                    viewModel.showScrollUpButton(false)
+                    return
+                }
+
+                if (dy > 0) {
+                    viewModel.showScrollUpButton(true)
+                    return
+                }
+                viewModel.showScrollUpButton(false)
             }
         }
     }
@@ -161,7 +201,7 @@ class SearchFragment : Fragment() {
     private fun changeToolbarVisibleWithState(state: Int) {
         lifecycleScope.launch {
             if (state == RecyclerView.SCROLL_STATE_IDLE) {
-                delay(3000)
+                delay(1500)
                 mainViewModel.showToolBar(true)
                 return@launch
             }
@@ -175,8 +215,10 @@ class SearchFragment : Fragment() {
             adapter = imageSearchAdapter
             layoutManager = LinearLayoutManager(requireContext())
             itemAnimator = null
-            addItemDecoration(ItemDeco(requireContext()))
             addOnScrollListener(getScrollListener())
+            if (itemDecorationCount < 1) {
+                addItemDecoration(ItemDeco(requireContext()))
+            }
         }
     }
 

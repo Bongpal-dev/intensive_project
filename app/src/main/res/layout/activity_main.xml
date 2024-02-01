@@ -22,6 +22,13 @@
         app:navGraph="@navigation/navi_graph"
         tools:layout="@layout/fragment_main" />
 
+    <View
+        android:id="@+id/bottom_gradient"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@drawable/bg_main_gradient_reverse"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navi"
         android:layout_width="0dp"
@@ -33,7 +40,6 @@
         app:itemIconSize="28dp"
         app:itemIconTint="@drawable/selector_bottom_navi_color"
         app:itemRippleColor="@null"
-        app:itemTextColor="@drawable/selector_bottom_navi_color"
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

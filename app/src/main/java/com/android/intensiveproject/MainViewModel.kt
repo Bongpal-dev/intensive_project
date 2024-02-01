@@ -35,8 +35,4 @@ class MainViewModel : ViewModel() {
     fun showToolBar(show: Boolean) {
         _toolBarState.value = show
     }
-
-    fun refreshMyStorage() {
-        _myStorages.value = pref.getAll()
-    }
 }

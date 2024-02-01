@@ -3,18 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/main"
+        android:id="@+id/menu_main"
         android:enabled="true"
-        android:icon="@drawable/btn_search_active"
+        android:icon="@drawable/selector_search"
         android:title="이미지 검색"
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/my_storage"
+        android:id="@+id/menu_my_storage"
         android:enabled="true"
-        android:icon="@drawable/btn_my_active"
+        android:icon="@drawable/selector_my_storage"
         android:title="내 보관함"
         app:showAsAction="always" />
-
 
 </menu>

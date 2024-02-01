@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/frag_main"
     tools:context=".fragment.MainFragment">
 
     <View
@@ -43,7 +44,7 @@
         android:layout_height="24dp"
         android:layout_marginEnd="20dp"
         android:elevation="1dp"
-        android:src="@drawable/btn_search_active"
+        android:src="@drawable/btn_search_color"
         app:layout_constraintBottom_toBottomOf="@id/btn_to_search_frag"
         app:layout_constraintEnd_toEndOf="@id/btn_to_search_frag"
         app:layout_constraintTop_toTopOf="@id/btn_to_search_frag" />

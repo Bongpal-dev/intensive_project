@@ -10,14 +10,22 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.intensiveproject.MainViewModel
 import com.android.intensiveproject.R
 import com.android.intensiveproject.TAG
 import com.android.intensiveproject.adapter.ImageSearchAdapter
 import com.android.intensiveproject.data.Contents
 import com.android.intensiveproject.databinding.FragmentMyStoragyBinding
+import com.android.intensiveproject.extention.moveWithAnimation
+import com.android.intensiveproject.util.ItemDeco
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MyStorageFragment : Fragment() {
     private val binding by lazy { FragmentMyStoragyBinding.inflate(layoutInflater) }
@@ -27,13 +35,13 @@ class MyStorageFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-//        onBackPressed()
+        onBackPressed()
     }
 
     private fun onBackPressed() {
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                requireActivity().findNavController(R.id.nav_host).popBackStack(R.id.search, true)
+                requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navi).selectedItemId = R.id.menu_main
             }
         }.also { backPressedCallback = it }
         requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
@@ -62,6 +70,13 @@ class MyStorageFragment : Fragment() {
             myStorages.observe(viewLifecycleOwner) {
                 imageSearchAdapter.submitList(it.toList())
             }
+            toolBarState.observe(viewLifecycleOwner) { visible ->
+                if (visible) {
+                    binding.layoutSearchBar.moveWithAnimation(0f)
+                } else {
+                    binding.layoutSearchBar.moveWithAnimation(-60f)
+                }
+            }
         }
     }
 
@@ -69,7 +84,29 @@ class MyStorageFragment : Fragment() {
         with(binding.rvMyFavorite) {
             adapter = imageSearchAdapter
             layoutManager = LinearLayoutManager(context)
+            addItemDecoration(ItemDeco(context))
+            addOnScrollListener(getScrollListener())
         }
+    }
+
+    private fun getScrollListener(): RecyclerView.OnScrollListener {
+        return object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                changeToolbarVisibleWithState(newState)
+            }
+        }
+    }
+
+    private fun changeToolbarVisibleWithState(state: Int) {
+        lifecycleScope.launch {
+            if (state == RecyclerView.SCROLL_STATE_IDLE) {
+                delay(1500)
+                mainViewModel.showToolBar(true)
+                return@launch
+            }
+            mainViewModel.showToolBar(false)
+        }
+        return
     }
 
     private fun initClickFavorite() {

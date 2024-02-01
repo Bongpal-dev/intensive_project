@@ -3,35 +3,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navi_graph"
-    app:startDestination="@id/main">
+    app:startDestination="@id/menu_main">
 
     <fragment
-        android:id="@+id/main"
+        android:id="@+id/menu_main"
         android:name="com.android.intensiveproject.fragment.MainFragment"
         android:label="main_fragment"
         tools:layout="@layout/fragment_main">
 
         <action
             android:id="@+id/action_main_to_search"
-            app:destination="@id/search" />
+            app:destination="@id/menu_search" />
+        <action
+            android:id="@+id/action_main_to_my_storage"
+            app:destination="@id/menu_my_storage" />
 
     </fragment>
 
     <fragment
-        android:id="@+id/my_storage"
+        android:id="@+id/menu_my_storage"
         android:name="com.android.intensiveproject.fragment.MyStorageFragment"
         android:label="my_storage_fragment"
-        tools:layout="@layout/fragment_my_storagy" />
+        tools:layout="@layout/fragment_my_storagy" >
+        <action
+            android:id="@+id/action_my_storage_to_search"
+            app:destination="@id/menu_search"
+            app:popUpTo="@id/menu_search"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_my_storage_to_main"
+            app:destination="@id/menu_main"
+            app:popUpTo="@id/menu_main"
+            app:popUpToInclusive="true" />
+    </fragment>
 
     <fragment
-        android:id="@+id/search"
+        android:id="@+id/menu_search"
         android:name="com.android.intensiveproject.searchfragment.SearchFragment"
         android:label="search_fragment"
         tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/action_search_to_my_storage"
-            app:destination="@id/my_storage"
-            app:popUpTo="@id/navi_graph" />
+            app:destination="@id/menu_my_storage" />
+        <action
+            android:id="@+id/action_search_to_main"
+            app:destination="@id/menu_main"
+            app:popUpTo="@id/menu_main"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>
