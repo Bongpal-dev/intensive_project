@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.intensiveproject.TAG
-import com.android.intensiveproject.data.Contents
+import com.android.intensiveproject.model.data.Contents
 import com.android.intensiveproject.model.retrofit.SearchClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,16 +28,16 @@ class SearchViewModel : ViewModel() {
     }
 
     fun getSearchResults(keyWord: String) {
-        keyWord.getItemFromAPI(NEW_RESULT)
+        keyWord.getItemFromAPI(NEW_RESULT, keyWord)
     }
 
     fun getMoreResult(keyWord: String) {
-        keyWord.getItemFromAPI(MORE_RESULT)
+        keyWord.getItemFromAPI(MORE_RESULT, keyWord)
     }
 
     private var page = 1
 
-    private fun String.getItemFromAPI(resultState: Int) {
+    private fun String.getItemFromAPI(resultState: Int, keyWord: String) {
         val API_KEY = "KakaoAK aa9dcfa994967af44de93c594a380bab"
 
         if (resultState == NEW_RESULT) page = 1 else page++
@@ -49,9 +49,11 @@ class SearchViewModel : ViewModel() {
 
             with(searchClient) {
                 getImageItems(API_KEY, imageParams).documents?.forEach {
+                    it.keyword = keyWord
                     results += it
                 }
                 getVidioItems(API_KEY, videoParams).documents?.forEach {
+                    it.keyword = keyWord
                     results += it
                 }
             }

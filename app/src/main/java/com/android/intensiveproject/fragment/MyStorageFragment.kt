@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -19,7 +20,7 @@ import com.android.intensiveproject.MainViewModel
 import com.android.intensiveproject.R
 import com.android.intensiveproject.TAG
 import com.android.intensiveproject.adapter.ImageSearchAdapter
-import com.android.intensiveproject.data.Contents
+import com.android.intensiveproject.model.data.Contents
 import com.android.intensiveproject.databinding.FragmentMyStoragyBinding
 import com.android.intensiveproject.extention.moveWithAnimation
 import com.android.intensiveproject.util.ItemDeco
@@ -63,8 +64,14 @@ class MyStorageFragment : Fragment() {
     private fun initView() {
         initRecyclerView()
         initClickFavorite()
+        initSearchBar()
     }
 
+    private fun initSearchBar() {
+        binding.etSearchBar.doAfterTextChanged {
+            mainViewModel.filterWithKeyword(it.toString())
+        }
+    }
     private fun initObserver() {
         with(mainViewModel) {
             myStorages.observe(viewLifecycleOwner) {
@@ -76,6 +83,11 @@ class MyStorageFragment : Fragment() {
                 } else {
                     binding.layoutSearchBar.moveWithAnimation(-60f)
                 }
+            }
+
+            searchResult.observe(viewLifecycleOwner) {
+                it.forEach { Log.i(TAG, "${it}") }
+                imageSearchAdapter.submitList(it.toList())
             }
         }
     }

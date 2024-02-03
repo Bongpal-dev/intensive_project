@@ -13,7 +13,8 @@
 
         <action
             android:id="@+id/action_main_to_search"
-            app:destination="@id/menu_search" />
+            app:destination="@id/menu_search"
+            app:enterAnim="@android:anim/fade_in" />
         <action
             android:id="@+id/action_main_to_my_storage"
             app:destination="@id/menu_my_storage" />
@@ -24,7 +25,7 @@
         android:id="@+id/menu_my_storage"
         android:name="com.android.intensiveproject.fragment.MyStorageFragment"
         android:label="my_storage_fragment"
-        tools:layout="@layout/fragment_my_storagy" >
+        tools:layout="@layout/fragment_my_storagy">
         <action
             android:id="@+id/action_my_storage_to_search"
             app:destination="@id/menu_search"
@@ -41,7 +42,7 @@
         android:id="@+id/menu_search"
         android:name="com.android.intensiveproject.searchfragment.SearchFragment"
         android:label="search_fragment"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_search_to_my_storage"
             app:destination="@id/menu_my_storage" />

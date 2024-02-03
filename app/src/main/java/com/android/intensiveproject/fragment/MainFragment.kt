@@ -3,9 +3,13 @@ package com.android.intensiveproject.fragment
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.android.intensiveproject.MainViewModel
@@ -33,7 +37,9 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnToSearchFrag.setOnClickListener {
-            findNavController().navigate(R.id.action_main_to_search)
+            val extras = FragmentNavigatorExtras(it to "shared_search_bar")
+
+            findNavController().navigate(R.id.action_main_to_search, null, null, extras)
         }
     }
 }

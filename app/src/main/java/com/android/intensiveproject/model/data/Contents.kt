@@ -1,4 +1,4 @@
-package com.android.intensiveproject.data
+package com.android.intensiveproject.model.data
 
 import com.google.gson.annotations.SerializedName
 
@@ -15,7 +15,8 @@ sealed class Contents {
         @SerializedName("doc_url")
         val webPageUrl: String,
         val width: Int,
-        val height: Int
+        val height: Int,
+        var keyword: String
     ) : Contents()
 
     data class VideoItems(val documents: MutableList<VideoItem>?)
@@ -24,7 +25,7 @@ sealed class Contents {
         @SerializedName("thumbnail")
         val imageUrl: String,
         val datetime: String,
-        val title: String
+        val title: String,
+        var keyword: String
     ) : Contents()
-
 }

@@ -2,6 +2,7 @@ package com.android.intensiveproject.searchfragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent.*
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,12 +14,16 @@ import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
+import androidx.transition.TransitionInflater
 import com.android.intensiveproject.MainViewModel
+import com.android.intensiveproject.R
+import com.android.intensiveproject.TAG
 import com.android.intensiveproject.adapter.ImageSearchAdapter
-import com.android.intensiveproject.data.Contents
+import com.android.intensiveproject.model.data.Contents
 import com.android.intensiveproject.databinding.FragmentSearchBinding
 import com.android.intensiveproject.extention.gone
 import com.android.intensiveproject.extention.moveWithAnimation
@@ -38,6 +43,16 @@ class SearchFragment : Fragment() {
         )
     }
     private val imm by lazy { requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.i(TAG, "onStart")
+
+        enterTransition =
+            TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.fade)
+        sharedElementEnterTransition =
+            TransitionInflater.from(requireContext()).inflateTransition(android.R.transition.move)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,11 +81,12 @@ class SearchFragment : Fragment() {
     private fun initScrollUpButton() {
         with(binding) {
             btnScrollUp.setOnClickListener {
-                val nowPosition = (rvSearchResult.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                val nowPosition =
+                    (rvSearchResult.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
 
                 lifecycleScope.launch {
 
-                    rvSearchResult.smoothScrollBy(0,-binding.rvSearchResult.computeVerticalScrollOffset()/4, null, 2000)
+                    rvSearchResult.smoothScrollToPosition(nowPosition - 15)
 
                     delay(1000L)
                     rvSearchResult.scrollToPosition(0)
@@ -97,16 +113,16 @@ class SearchFragment : Fragment() {
 
     private fun setupObserver() {
         with(viewModel) {
-            toastMsg.observe(viewLifecycleOwner) {
-                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            toastMsg.observe(viewLifecycleOwner) { msg ->
+                Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
             }
             searchResult.observe(viewLifecycleOwner) {
                 imageSearchAdapter.submitList(it.toList())
             }
         }
-
         with(mainViewModel) {
             myStorages.observe(viewLifecycleOwner) {
+                it.forEach { Log.i(TAG, "${it}") }
                 imageSearchAdapter.storageItem = it
                 imageSearchAdapter.notifyDataSetChanged()
             }
@@ -184,6 +200,7 @@ class SearchFragment : Fragment() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
+
                 if (!recyclerView.canScrollVertically(-1)) {
                     viewModel.showScrollUpButton(false)
                     return
@@ -240,21 +257,24 @@ class SearchFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.etSearchBar.requestFocusIsEmpty()
+
+        val prevId =
+            findNavController().currentBackStackEntry?.savedStateHandle?.get<Int>("prev_frag")
+
+        if (prevId == null) {
+            binding.etSearchBar.requestFocusAndKeyboardShow()
+        }
+
         checkBackStack(parentFragmentManager)
     }
 
-    private fun EditText.requestFocusIsEmpty() {
+    private fun EditText.requestFocusAndKeyboardShow() {
         val keyword = mainViewModel.getSearchKeyword().trim()
 
-        if (keyword.isNotEmpty()) {
-            setText(keyword)
-        }
-
-        if (text.isEmpty()) {
-            requestFocus()
-            showKeyboard(this@requestFocusIsEmpty)
-        }
+        setText(keyword)
+        this.setSelection(this.text.length)
+        requestFocus()
+        showKeyboard(this@requestFocusAndKeyboardShow)
     }
 }
 

@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     if (childFrag is MyStorageFragment && prevDestination == searchFragment) {
+                        navHost.navController.getBackStackEntry(R.id.menu_search).savedStateHandle.set("prev_frag", R.id.menu_my_storage)
                         navHost.navController.popBackStack()
                         return@setOnItemSelectedListener true
                     }

@@ -12,10 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginTop="-2dp"
+        android:transitionName="shared_search_bar"
         android:background="@drawable/bg_search_bar"
         android:clipToOutline="true"
         android:elevation="2dp"
-        android:transitionName="search_bar"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout

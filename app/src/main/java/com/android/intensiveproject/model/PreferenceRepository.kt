@@ -2,8 +2,8 @@ package com.android.intensiveproject.model
 
 import android.content.Context
 import com.android.intensiveproject.MyApp
-import com.android.intensiveproject.data.Contents
-import com.android.intensiveproject.data.Contents.*
+import com.android.intensiveproject.model.data.Contents
+import com.android.intensiveproject.model.data.Contents.*
 import com.google.gson.Gson
 
 class PreferenceRepository {

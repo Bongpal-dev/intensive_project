@@ -4,6 +4,7 @@
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:statusBarColor">@color/main</item>
         <item name="android:navigationBarColor">@color/main</item>
+        <item name="android:windowBackground">@color/dark_background</item>
     </style>
 
     <style name="Theme.IntensiveProject" parent="Base.Theme.IntensiveProject" />
