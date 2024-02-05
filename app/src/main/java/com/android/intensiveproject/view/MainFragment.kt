@@ -1,18 +1,15 @@
-package com.android.intensiveproject.fragment
+package com.android.intensiveproject.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import coil.load
-import com.android.intensiveproject.MainViewModel
+import com.android.intensiveproject.view.mainactivity.MainViewModel
 import com.android.intensiveproject.R
 import com.android.intensiveproject.databinding.FragmentMainBinding
 

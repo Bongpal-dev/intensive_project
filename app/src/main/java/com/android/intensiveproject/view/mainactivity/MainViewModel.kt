@@ -1,10 +1,9 @@
-package com.android.intensiveproject
+package com.android.intensiveproject.view.mainactivity
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.android.intensiveproject.model.data.Contents
+import com.android.intensiveproject.data.Contents
 import com.android.intensiveproject.model.PreferenceRepository
 
 class MainViewModel : ViewModel() {

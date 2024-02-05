@@ -1,4 +1,4 @@
-package com.android.intensiveproject.fragment
+package com.android.intensiveproject.view
 
 import android.content.Context
 import android.os.Bundle
@@ -12,17 +12,15 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.intensiveproject.MainViewModel
+import com.android.intensiveproject.view.mainactivity.MainViewModel
 import com.android.intensiveproject.R
-import com.android.intensiveproject.TAG
-import com.android.intensiveproject.adapter.ImageSearchAdapter
-import com.android.intensiveproject.model.data.Contents
+import com.android.intensiveproject.view.mainactivity.TAG
+import com.android.intensiveproject.view.adapter.ImageSearchAdapter
+import com.android.intensiveproject.data.Contents
 import com.android.intensiveproject.databinding.FragmentMyStoragyBinding
-import com.android.intensiveproject.extention.moveWithAnimation
+import com.android.intensiveproject.util.extention.moveWithAnimation
 import com.android.intensiveproject.util.ItemDeco
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.delay
@@ -30,7 +28,7 @@ import kotlinx.coroutines.launch
 
 class MyStorageFragment : Fragment() {
     private val binding by lazy { FragmentMyStoragyBinding.inflate(layoutInflater) }
-    private val imageSearchAdapter by lazy { ImageSearchAdapter(mainViewModel.getAllPrefItems()) }
+    private val imageSearchAdapter by lazy { ImageSearchAdapter(requireContext(), mainViewModel.getAllPrefItems()) }
     lateinit var backPressedCallback: OnBackPressedCallback
     private val mainViewModel by lazy { ViewModelProvider(requireActivity()).get(MainViewModel::class.java) }
 
@@ -86,7 +84,7 @@ class MyStorageFragment : Fragment() {
             }
 
             searchResult.observe(viewLifecycleOwner) {
-                it.forEach { Log.i(TAG, "${it}") }
+                it.forEach { Log.i(com.android.intensiveproject.view.mainactivity.TAG, "${it}") }
                 imageSearchAdapter.submitList(it.toList())
             }
         }

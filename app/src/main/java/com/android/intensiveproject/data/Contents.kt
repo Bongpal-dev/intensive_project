@@ -1,4 +1,4 @@
-package com.android.intensiveproject.model.data
+package com.android.intensiveproject.data
 
 import com.google.gson.annotations.SerializedName
 

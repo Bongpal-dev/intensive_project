@@ -1,4 +1,4 @@
-package com.android.intensiveproject.extention
+package com.android.intensiveproject.util.extention
 
 import android.animation.ObjectAnimator
 import android.view.View

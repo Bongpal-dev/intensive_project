@@ -5,7 +5,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
-import com.android.intensiveproject.extention.dpToPx
+import com.android.intensiveproject.util.extention.dpToPx
 
 class ItemDeco(val context: Context) : ItemDecoration() {
     override fun getItemOffsets(

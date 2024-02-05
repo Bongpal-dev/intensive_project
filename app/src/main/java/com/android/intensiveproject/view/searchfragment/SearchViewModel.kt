@@ -1,16 +1,14 @@
-package com.android.intensiveproject.searchfragment
+package com.android.intensiveproject.view.searchfragment
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.intensiveproject.TAG
-import com.android.intensiveproject.model.data.Contents
+import com.android.intensiveproject.view.mainactivity.TAG
+import com.android.intensiveproject.data.Contents
 import com.android.intensiveproject.model.retrofit.SearchClient
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class SearchViewModel : ViewModel() {
     private var _searchResult = MutableLiveData<MutableList<Contents>>()

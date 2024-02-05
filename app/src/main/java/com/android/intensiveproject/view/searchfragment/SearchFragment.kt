@@ -1,4 +1,4 @@
-package com.android.intensiveproject.searchfragment
+package com.android.intensiveproject.view.searchfragment
 
 import android.content.Context
 import android.os.Bundle
@@ -19,23 +19,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import androidx.transition.TransitionInflater
-import com.android.intensiveproject.MainViewModel
-import com.android.intensiveproject.R
-import com.android.intensiveproject.TAG
-import com.android.intensiveproject.adapter.ImageSearchAdapter
-import com.android.intensiveproject.model.data.Contents
+import com.android.intensiveproject.view.mainactivity.MainViewModel
+import com.android.intensiveproject.view.mainactivity.TAG
+import com.android.intensiveproject.view.adapter.ImageSearchAdapter
+import com.android.intensiveproject.data.Contents
 import com.android.intensiveproject.databinding.FragmentSearchBinding
-import com.android.intensiveproject.extention.gone
-import com.android.intensiveproject.extention.moveWithAnimation
-import com.android.intensiveproject.extention.visible
-import com.android.intensiveproject.fragment.checkBackStack
+import com.android.intensiveproject.util.extention.gone
+import com.android.intensiveproject.util.extention.moveWithAnimation
+import com.android.intensiveproject.util.extention.visible
+import com.android.intensiveproject.view.checkBackStack
 import com.android.intensiveproject.util.ItemDeco
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
     private val binding by lazy { FragmentSearchBinding.inflate(layoutInflater) }
-    private val imageSearchAdapter by lazy { ImageSearchAdapter(mainViewModel.getAllPrefItems()) }
+    private val imageSearchAdapter by lazy { ImageSearchAdapter(requireContext(), mainViewModel.getAllPrefItems()) }
     private val viewModel by lazy { ViewModelProvider(this).get(SearchViewModel::class.java) }
     private val mainViewModel by lazy {
         ViewModelProvider(requireActivity()).get(
@@ -122,7 +121,7 @@ class SearchFragment : Fragment() {
         }
         with(mainViewModel) {
             myStorages.observe(viewLifecycleOwner) {
-                it.forEach { Log.i(TAG, "${it}") }
+                it.forEach { Log.i(com.android.intensiveproject.view.mainactivity.TAG, "${it}") }
                 imageSearchAdapter.storageItem = it
                 imageSearchAdapter.notifyDataSetChanged()
             }

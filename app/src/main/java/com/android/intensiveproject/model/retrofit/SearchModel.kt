@@ -1,6 +1,6 @@
 package com.android.intensiveproject.model.retrofit
 
-import com.android.intensiveproject.model.data.Contents.*
+import com.android.intensiveproject.data.Contents.*
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.QueryMap

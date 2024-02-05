@@ -1,23 +1,18 @@
-package com.android.intensiveproject
+package com.android.intensiveproject.view.mainactivity
 
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
+import com.android.intensiveproject.R
 import com.android.intensiveproject.databinding.ActivityMainBinding
-import com.android.intensiveproject.databinding.FragmentMainBinding
-import com.android.intensiveproject.extention.moveWithAnimation
-import com.android.intensiveproject.fragment.MainFragment
-import com.android.intensiveproject.fragment.MyStorageFragment
-import com.android.intensiveproject.searchfragment.SearchFragment
-import kotlinx.coroutines.flow.last
+import com.android.intensiveproject.util.extention.moveWithAnimation
+import com.android.intensiveproject.view.MainFragment
+import com.android.intensiveproject.view.MyStorageFragment
+import com.android.intensiveproject.view.searchfragment.SearchFragment
 
 const val TAG = "project_test_log"
 
@@ -57,7 +52,9 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     if (childFrag is MyStorageFragment && prevDestination == searchFragment) {
-                        navHost.navController.getBackStackEntry(R.id.menu_search).savedStateHandle.set("prev_frag", R.id.menu_my_storage)
+                        navHost.navController.getBackStackEntry(R.id.menu_search).savedStateHandle.set("prev_frag",
+                            R.id.menu_my_storage
+                        )
                         navHost.navController.popBackStack()
                         return@setOnItemSelectedListener true
                     }
