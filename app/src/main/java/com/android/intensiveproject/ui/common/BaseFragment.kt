@@ -6,7 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.android.intensiveproject.util.Inflate
+
+typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
 open class BaseFragment<VB: ViewBinding>(private val inflate: Inflate<VB>): Fragment() {
     private var _binding: VB? = null

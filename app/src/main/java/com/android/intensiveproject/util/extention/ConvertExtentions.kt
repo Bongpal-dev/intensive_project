@@ -1,7 +1,7 @@
 package com.android.intensiveproject.util.extention
 
 import android.util.TypedValue
-import com.android.intensiveproject.domain.MyApplication
+import com.android.intensiveproject.MyApplication
 
 fun Int.dpToPx(): Int {
     return TypedValue.applyDimension(
