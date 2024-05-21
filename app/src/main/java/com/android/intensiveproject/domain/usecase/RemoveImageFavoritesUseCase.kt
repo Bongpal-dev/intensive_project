@@ -4,10 +4,10 @@ import com.android.intensiveproject.data.model.ImageModel
 import com.android.intensiveproject.domain.repository.ImageRepository
 import javax.inject.Inject
 
-class GetImageByKeywordUseCase @Inject constructor(
-    private val imageRepo: ImageRepository
+class RemoveImageFavoritesUseCase @Inject constructor(
+    private val imageRepository: ImageRepository
 ) {
-    suspend operator fun invoke(keyword: String): List<ImageModel> {
-        return imageRepo.getByKeyword(keyword)
+    operator fun invoke(image: ImageModel) {
+        imageRepository.removeFromFavorites(image)
     }
 }

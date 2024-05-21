@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/menu_main"
-        android:name="com.android.intensiveproject.ui.MainFragment"
+        android:name="com.android.intensiveproject.ui.home.HomeFragment"
         android:label="main_fragment"
-        tools:layout="@layout/fragment_main">
+        tools:layout="@layout/fragment_home">
 
         <action
             android:id="@+id/action_main_to_search"
@@ -23,9 +23,9 @@
 
     <fragment
         android:id="@+id/menu_my_storage"
-        android:name="com.android.intensiveproject.ui.MyStorageFragment"
+        android:name="com.android.intensiveproject.ui.mybox.MyStorageFragment"
         android:label="my_storage_fragment"
-        tools:layout="@layout/fragment_my_storagy">
+        tools:layout="@layout/fragment_my_box">
         <action
             android:id="@+id/action_my_storage_to_search"
             app:destination="@id/menu_search"
@@ -40,7 +40,7 @@
 
     <fragment
         android:id="@+id/menu_search"
-        android:name="com.android.intensiveproject.ui.searchfragment.SearchFragment"
+        android:name="com.android.intensiveproject.ui.search.SearchFragment"
         android:label="search_fragment"
         tools:layout="@layout/fragment_search">
         <action
