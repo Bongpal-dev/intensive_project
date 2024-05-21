@@ -1,4 +1,4 @@
-package com.android.intensiveproject.fragment
+package com.android.intensiveproject.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -11,25 +11,19 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.intensiveproject.MainViewModel
+import com.android.intensiveproject.ui.mainactivity.MainViewModel
 import com.android.intensiveproject.R
-import com.android.intensiveproject.TAG
-import com.android.intensiveproject.adapter.ImageSearchAdapter
-import com.android.intensiveproject.data.Contents
+import com.android.intensiveproject.ui.mainactivity.TAG
+//import com.android.intensiveproject.view.adapter.ImageSearchAdapter
 import com.android.intensiveproject.databinding.FragmentMyStoragyBinding
-import com.android.intensiveproject.extention.moveWithAnimation
-import com.android.intensiveproject.util.ItemDeco
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MyStorageFragment : Fragment() {
     private val binding by lazy { FragmentMyStoragyBinding.inflate(layoutInflater) }
-    private val imageSearchAdapter by lazy { ImageSearchAdapter(mainViewModel.getAllPrefItems()) }
+//    private val imageSearchAdapter by lazy { ImageSearchAdapter(requireContext(), mainViewModel.getAllPrefItems()) }
     lateinit var backPressedCallback: OnBackPressedCallback
     private val mainViewModel by lazy { ViewModelProvider(requireActivity()).get(MainViewModel::class.java) }
 
@@ -56,38 +50,49 @@ class MyStorageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initObserver()
+//        initObserver()
         initView()
     }
 
     private fun initView() {
-        initRecyclerView()
+//        initRecyclerView()
         initClickFavorite()
+        initSearchBar()
     }
 
-    private fun initObserver() {
-        with(mainViewModel) {
-            myStorages.observe(viewLifecycleOwner) {
-                imageSearchAdapter.submitList(it.toList())
-            }
-            toolBarState.observe(viewLifecycleOwner) { visible ->
-                if (visible) {
-                    binding.layoutSearchBar.moveWithAnimation(0f)
-                } else {
-                    binding.layoutSearchBar.moveWithAnimation(-60f)
-                }
-            }
-        }
+    private fun initSearchBar() {
+//        binding.etSearchBar.doAfterTextChanged {
+//            mainViewModel.filterWithKeyword(it.toString())
+//        }
     }
+//    private fun initObserver() {
+//        with(mainViewModel) {
+//            myStorages.observe(viewLifecycleOwner) {
+//                imageSearchAdapter.submitList(it.toList())
+//            }
+//            toolBarState.observe(viewLifecycleOwner) { visible ->
+//                if (visible) {
+//                    binding.layoutSearchBar.moveWithAnimation(0f)
+//                } else {
+//                    binding.layoutSearchBar.moveWithAnimation(-60f)
+//                }
+//            }
+//
+//            searchResult.observe(viewLifecycleOwner) {
+//                it.forEach { Log.i(com.android.intensiveproject.view.mainactivity.TAG, "${it}") }
+//                imageSearchAdapter.submitList(it.toList())
+//            }
+//        }
+//    }
 
-    private fun initRecyclerView() {
-        with(binding.rvMyFavorite) {
-            adapter = imageSearchAdapter
-            layoutManager = LinearLayoutManager(context)
-            addItemDecoration(ItemDeco(context))
-            addOnScrollListener(getScrollListener())
-        }
-    }
+//    private fun initRecyclerView() {
+//        with(binding.rvMyFavorite) {
+//            adapter = imageSearchAdapter
+//            layoutManager = LinearLayoutManager(context)
+//            addItemDecoration(ItemDeco(context))
+//            addOnScrollListener(getScrollListener())
+//        }
+//    }
 
     private fun getScrollListener(): RecyclerView.OnScrollListener {
         return object : RecyclerView.OnScrollListener() {
@@ -110,18 +115,18 @@ class MyStorageFragment : Fragment() {
     }
 
     private fun initClickFavorite() {
-        object : ImageSearchAdapter.ClickFavoriteListener {
-            override fun onClick(item: Contents) {
-                mainViewModel.togglePreferenceItem(item)
-            }
-        }.also { imageSearchAdapter.onClick = it }
+//        object : ImageSearchAdapter.ClickFavoriteListener {
+//            override fun onClick(item: Contents) {
+//                mainViewModel.togglePreferenceItem(item)
+//            }
+//        }.also { imageSearchAdapter.onClick = it }
     }
 
-    override fun onResume() {
-        super.onResume()
-        checkBackStack(parentFragmentManager)
-        imageSearchAdapter.submitList(mainViewModel.getAllPrefItems().toList())
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        checkBackStack(parentFragmentManager)
+//        imageSearchAdapter.submitList(mainViewModel.getAllPrefItems().toList())
+//    }
 }
 
 fun checkBackStack(fragmentManager: FragmentManager) {
@@ -129,6 +134,6 @@ fun checkBackStack(fragmentManager: FragmentManager) {
     Log.i(TAG, "backcount: ${backstackCounter}")
     for (i in 0 until backstackCounter) {
         val entry = fragmentManager.getBackStackEntryAt(i)
-        Log.i(TAG, "BackStack Entry $i: ${entry.name}")
+        Log.i(TAG, "BackStack Entry $i: ${entry.id}")
     }
 }

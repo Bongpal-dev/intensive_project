@@ -1,13 +1,13 @@
-package com.android.intensiveproject.extention
+package com.android.intensiveproject.util.extention
 
 import android.util.TypedValue
-import com.android.intensiveproject.MyApp
+import com.android.intensiveproject.domain.MyApplication
 
 fun Int.dpToPx(): Int {
     return TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
         this.toFloat(),
-        MyApp.appContext.resources.displayMetrics
+        MyApplication.appContext.resources.displayMetrics
     ).toInt()
 }
 
@@ -15,6 +15,6 @@ fun Float.dpToPx(): Float {
     return TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
         this,
-        MyApp.appContext.resources.displayMetrics
+        MyApplication.appContext.resources.displayMetrics
     )
 }

@@ -1,26 +1,21 @@
-package com.android.intensiveproject
+package com.android.intensiveproject.ui.mainactivity
 
-import android.app.Application
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
+import com.android.intensiveproject.R
 import com.android.intensiveproject.databinding.ActivityMainBinding
-import com.android.intensiveproject.databinding.FragmentMainBinding
-import com.android.intensiveproject.extention.moveWithAnimation
-import com.android.intensiveproject.fragment.MainFragment
-import com.android.intensiveproject.fragment.MyStorageFragment
-import com.android.intensiveproject.searchfragment.SearchFragment
-import kotlinx.coroutines.flow.last
+import com.android.intensiveproject.util.extention.moveWithAnimation
+import com.android.intensiveproject.ui.MainFragment
+import com.android.intensiveproject.ui.MyStorageFragment
+import com.android.intensiveproject.ui.searchfragment.SearchFragment
+import dagger.hilt.android.AndroidEntryPoint
 
 const val TAG = "project_test_log"
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val mainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
@@ -57,6 +52,9 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     if (childFrag is MyStorageFragment && prevDestination == searchFragment) {
+                        navHost.navController.getBackStackEntry(R.id.menu_search).savedStateHandle.set("prev_frag",
+                            R.id.menu_my_storage
+                        )
                         navHost.navController.popBackStack()
                         return@setOnItemSelectedListener true
                     }
@@ -88,14 +86,5 @@ class MainActivity : AppCompatActivity() {
 }
 
 
-class MyApp : Application() {
-    companion object {
-        lateinit var appContext: Context
-    }
 
-    override fun onCreate() {
-        super.onCreate()
-        appContext = applicationContext
-    }
-}
 
