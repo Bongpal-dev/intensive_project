@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".domain.MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -10,12 +11,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_supic_round"
         android:supportsRtl="true"
-        android:name=".view.mainactivity.MyApp"
         android:theme="@style/Theme.IntensiveProject"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".view.mainactivity.MainActivity"
+            android:name=".ui.mainactivity.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>

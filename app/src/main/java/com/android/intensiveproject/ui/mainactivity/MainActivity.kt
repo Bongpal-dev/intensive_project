@@ -1,7 +1,5 @@
-package com.android.intensiveproject.view.mainactivity
+package com.android.intensiveproject.ui.mainactivity
 
-import android.app.Application
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -10,12 +8,14 @@ import androidx.navigation.fragment.NavHostFragment
 import com.android.intensiveproject.R
 import com.android.intensiveproject.databinding.ActivityMainBinding
 import com.android.intensiveproject.util.extention.moveWithAnimation
-import com.android.intensiveproject.view.MainFragment
-import com.android.intensiveproject.view.MyStorageFragment
-import com.android.intensiveproject.view.searchfragment.SearchFragment
+import com.android.intensiveproject.ui.MainFragment
+import com.android.intensiveproject.ui.MyStorageFragment
+import com.android.intensiveproject.ui.searchfragment.SearchFragment
+import dagger.hilt.android.AndroidEntryPoint
 
 const val TAG = "project_test_log"
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val mainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
@@ -86,14 +86,5 @@ class MainActivity : AppCompatActivity() {
 }
 
 
-class MyApp : Application() {
-    companion object {
-        lateinit var appContext: Context
-    }
 
-    override fun onCreate() {
-        super.onCreate()
-        appContext = applicationContext
-    }
-}
 
