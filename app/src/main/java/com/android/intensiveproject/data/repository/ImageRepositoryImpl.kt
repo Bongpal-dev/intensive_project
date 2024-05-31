@@ -16,11 +16,11 @@ class ImageRepositoryImpl @Inject constructor(
     @Named("naver") val naverApi: ImageRDS,
     private val imageLDS: ImageLDS
 ) : ImageRepository {
-    override suspend fun getByKeyword(keyword: String): List<ImageModel> =
+    override suspend fun getByQuery(query: String): List<ImageModel> =
         withContext(Dispatchers.IO) {
             val apis = listOf<suspend () -> List<ImageModel>>(
-                { kakaoApi.getByKeyword(keyword) },
-                { naverApi.getByKeyword(keyword) }
+                { kakaoApi.getByQuery(query) },
+                { naverApi.getByQuery(query) }
             )
             val deferredResults = apis.map { async { it() } }
 

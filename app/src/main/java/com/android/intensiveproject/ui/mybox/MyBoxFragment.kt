@@ -15,7 +15,7 @@ import com.android.intensiveproject.data.model.ImageModel
 import com.android.intensiveproject.databinding.FragmentMyBoxBinding
 import com.android.intensiveproject.ui.common.BaseFragment
 import com.android.intensiveproject.ui.common.ImageAdapter
-import com.android.intensiveproject.ui.main.MainViewModel
+import com.android.intensiveproject.ui.common.MainViewModel
 import com.android.intensiveproject.ui.main.TAG
 import com.android.intensiveproject.util.ItemDeco
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -98,20 +98,5 @@ class MyStorageFragment : BaseFragment<FragmentMyBoxBinding>(inflate = FragmentM
                 mainViewModel.toggleFavoriteImage(item)
             }
         }.also { imageAdapter.favoriteClickListener = it }
-    }
-
-//    override fun onResume() {
-//        super.onResume()
-//        checkBackStack(parentFragmentManager)
-//        imageSearchAdapter.submitList(mainViewModel.getAllPrefItems().toList())
-//    }
-}
-
-fun checkBackStack(fragmentManager: FragmentManager) {
-    val backstackCounter = fragmentManager.backStackEntryCount
-    Log.i(TAG, "backcount: ${backstackCounter}")
-    for (i in 0 until backstackCounter) {
-        val entry = fragmentManager.getBackStackEntryAt(i)
-        Log.i(TAG, "BackStack Entry $i: ${entry.id}")
     }
 }

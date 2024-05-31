@@ -3,10 +3,12 @@ package com.android.intensiveproject.ui.main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.android.intensiveproject.R
 import com.android.intensiveproject.databinding.ActivityMainBinding
+import com.android.intensiveproject.ui.common.MainViewModel
 import com.android.intensiveproject.util.extention.moveWithAnimation
 import com.android.intensiveproject.ui.home.HomeFragment
 import com.android.intensiveproject.ui.mybox.MyStorageFragment

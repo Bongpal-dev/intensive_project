@@ -18,11 +18,11 @@ import javax.inject.Inject
 const val KAKAO = 1
 
 class Kakao @Inject constructor() : ImageRDS {
-    override suspend fun getByKeyword(keyword: String): List<ImageModel> {
+    override suspend fun getByQuery(query: String): List<ImageModel> {
         val client = KakaoImageSearchClient().retrofitClient
         val response = client.getImageItems(
             BuildConfig.KAKAO_API_KEY,
-            makeRequestParam(keyword, 40, 1)
+            makeRequestParam(query, 40, 1)
         ).documents
 
         return response.map {
@@ -31,7 +31,7 @@ class Kakao @Inject constructor() : ImageRDS {
                 it.width,
                 it.height,
                 KAKAO,
-                keyword
+                query
             )
         }
     }

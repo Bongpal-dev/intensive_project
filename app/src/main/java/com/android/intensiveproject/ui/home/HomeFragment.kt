@@ -1,15 +1,12 @@
 package com.android.intensiveproject.ui.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import coil.load
-import com.android.intensiveproject.ui.main.MainViewModel
+import com.android.intensiveproject.ui.common.MainViewModel
 import com.android.intensiveproject.R
 import com.android.intensiveproject.databinding.FragmentHomeBinding
 import com.android.intensiveproject.ui.common.BaseFragment

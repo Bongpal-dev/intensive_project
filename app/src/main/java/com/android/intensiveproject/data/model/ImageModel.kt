@@ -14,4 +14,12 @@ data class ImageModel(
     fun toggleFavorite(): ImageModel {
         return this.copy(favorite = favorite.not())
     }
+
+    fun like(): ImageModel {
+        return this.copy(favorite = true)
+    }
+
+    fun dislike(): ImageModel {
+        return this.copy(favorite = false)
+    }
 }

@@ -27,7 +27,7 @@ class SearchViewModel @Inject constructor(
 
     fun searchImage(query: String) {
         viewModelScope.launch {
-            _searchResult.value = searchFacade.getImagesByKeyword(query)
+            _searchResult.value = searchFacade.getImagesByQuery(query)
         }
     }
 

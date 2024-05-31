@@ -4,8 +4,7 @@ import com.android.intensiveproject.domain.usecase.GetImageByKeywordUseCase
 import javax.inject.Inject
 
 class SearchFacade @Inject constructor(
-    private val getImageByKeywordUseCase: GetImageByKeywordUseCase,
-
+    private val getImageByQueryUseCase: GetImageByKeywordUseCase
     ) {
-    suspend fun getImagesByKeyword(keyword: String) = getImageByKeywordUseCase(keyword)
+    suspend fun getImagesByQuery(query: String) = getImageByQueryUseCase(query)
 }

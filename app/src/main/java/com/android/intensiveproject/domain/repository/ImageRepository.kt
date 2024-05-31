@@ -3,7 +3,7 @@ package com.android.intensiveproject.domain.repository
 import com.android.intensiveproject.data.model.ImageModel
 
 interface ImageRepository {
-    suspend fun getByKeyword(keyword: String): List<ImageModel>
+    suspend fun getByQuery(query: String): List<ImageModel>
 
     fun loadFavorites(): List<ImageModel>
 

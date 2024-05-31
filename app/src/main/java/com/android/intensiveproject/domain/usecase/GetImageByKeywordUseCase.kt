@@ -7,7 +7,7 @@ import javax.inject.Inject
 class GetImageByKeywordUseCase @Inject constructor(
     private val imageRepo: ImageRepository
 ) {
-    suspend operator fun invoke(keyword: String): List<ImageModel> {
-        return imageRepo.getByKeyword(keyword)
+    suspend operator fun invoke(query: String): List<ImageModel> {
+        return imageRepo.getByQuery(query)
     }
 }

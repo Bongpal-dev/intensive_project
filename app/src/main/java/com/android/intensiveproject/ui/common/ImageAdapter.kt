@@ -36,8 +36,11 @@ class ImageAdapter : ListAdapter<ImageModel, ViewHolder>(diffUtil) {
             ivImage.load(item.url)
             ivTypeTag.load(getEngineIcon(item.engine))
             tvSize.text = "H: ${item.height} * W: ${item.width}"
-            btnFavorite.setOnClickListener { favoriteClickListener?.onClick(item) }
             ivFavorite.load(if (item.favorite) R.drawable.btn_favorite_on else R.drawable.btn_favorite_off)
+            btnFavorite.setOnClickListener {
+                if (item.favorite.not()) lottieFavorite.showLottie()
+                favoriteClickListener?.onClick(item)
+            }
         }
     }
 
@@ -67,9 +70,7 @@ class ImageAdapter : ListAdapter<ImageModel, ViewHolder>(diffUtil) {
 //
 //                override fun onDoubleTap(e: MotionEvent): Boolean {
 //                    if (!storageItem.contains(item)) {
-//                        val lottie = (holder as SearchItemViewHolder).lottieFavorite
-//
-//                        lottie.showLottie()
+
 //                    }
 //                    onClick?.onClick(item)
 //                    return super.onDoubleTap(e)

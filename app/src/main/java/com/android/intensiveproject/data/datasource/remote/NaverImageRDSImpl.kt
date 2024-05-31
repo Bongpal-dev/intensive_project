@@ -17,11 +17,11 @@ import javax.inject.Inject
 const val NAVER = 2
 
 class Naver @Inject constructor() : ImageRDS {
-    override suspend fun getByKeyword(keyword: String): List<ImageModel> {
+    override suspend fun getByQuery(query: String): List<ImageModel> {
         val client = NaverImageSearchClient().retrofitClient
         val response = client.getImageItems(
             makeClientInfo(),
-            makeRequestParam(keyword, 40, 1)
+            makeRequestParam(query, 40, 1)
         ).items
 
         return response.map {
@@ -30,7 +30,7 @@ class Naver @Inject constructor() : ImageRDS {
                 it.sizewidth.toInt(),
                 it.sizeheight.toInt(),
                 NAVER,
-                keyword
+                query
             )
         }
     }

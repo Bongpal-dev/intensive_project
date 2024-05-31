@@ -1,4 +1,4 @@
-package com.android.intensiveproject.ui.main
+package com.android.intensiveproject.ui.common
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

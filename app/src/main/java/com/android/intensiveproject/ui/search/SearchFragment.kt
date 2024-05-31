@@ -16,13 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionInflater
 import com.android.intensiveproject.data.model.ImageModel
-import com.android.intensiveproject.ui.main.MainViewModel
+import com.android.intensiveproject.ui.common.MainViewModel
 import com.android.intensiveproject.databinding.FragmentSearchBinding
 import com.android.intensiveproject.ui.common.BaseFragment
 import com.android.intensiveproject.ui.common.ImageAdapter
 import com.android.intensiveproject.util.extention.gone
 import com.android.intensiveproject.util.extention.visible
-import com.android.intensiveproject.ui.mybox.checkBackStack
 import com.android.intensiveproject.util.ItemDeco
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -107,7 +106,7 @@ class SearchFragment :
             favorites.observe(viewLifecycleOwner) { favorites ->
                 val favoriteUrls = favorites.map { it.url }
                 val newList = imageAdapter.currentList.map { item ->
-                    item.copy(favorite = item.url in favoriteUrls)
+                    if (item.url in favoriteUrls) item.like() else item.dislike()
                 }
 
                 imageAdapter.submitList(newList.toList())
@@ -249,8 +248,6 @@ class SearchFragment :
         if (prevId == null) {
             binding.etSearchBar.requestFocusAndKeyboardShow()
         }
-
-        checkBackStack(parentFragmentManager)
     }
 
     private fun EditText.requestFocusAndKeyboardShow() {
